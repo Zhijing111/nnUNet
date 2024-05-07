@@ -8,7 +8,7 @@ from nnunetv2.training.dataloading.nnunet_dataset import nnUNetDataset
 
 class nnUNetDataLoader3D(nnUNetDataLoaderBase):
     def generate_train_batch(self):
-        selected_keys = self.get_indices()
+        selected_keys = self.get_indices()                  # ? base_data_loader
         # preallocate memory for data and seg
         data_all = np.zeros(self.data_shape, dtype=np.float32)
         seg_all = np.zeros(self.seg_shape, dtype=np.int16)
@@ -17,9 +17,9 @@ class nnUNetDataLoader3D(nnUNetDataLoaderBase):
         for j, i in enumerate(selected_keys):
             # oversampling foreground will improve stability of model training, especially if many patches are empty
             # (Lung for example)
-            force_fg = self.get_do_oversample(j)
+            force_fg = self.get_do_oversample(j)          # ? base_data_loader
 
-            data, seg, properties = self._data.load_case(i)
+            data, seg, properties = self._data.load_case(i) # ? nnUNetDataset
             case_properties.append(properties)
 
             # If we are doing the cascade then the segmentation from the previous stage will already have been loaded by
