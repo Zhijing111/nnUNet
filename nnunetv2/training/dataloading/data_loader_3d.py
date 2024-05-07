@@ -8,7 +8,7 @@ from nnunetv2.training.dataloading.nnunet_dataset import nnUNetDataset
 
 class nnUNetDataLoader3D(nnUNetDataLoaderBase):
     def generate_train_batch(self):
-        selected_keys = self.get_indices()
+        selected_keys = self.get_indices()                     # ? sampling strategy  # ? j, i -- selected_keys
         # preallocate memory for data and seg
         data_all = np.zeros(self.data_shape, dtype=np.float32)
         seg_all = np.zeros(self.seg_shape, dtype=np.int16)
@@ -17,7 +17,7 @@ class nnUNetDataLoader3D(nnUNetDataLoaderBase):
         for j, i in enumerate(selected_keys):
             # oversampling foreground will improve stability of model training, especially if many patches are empty
             # (Lung for example)
-            force_fg = self.get_do_oversample(j)
+            force_fg = self.get_do_oversample(j)                # ??
 
             data, seg, properties = self._data.load_case(i)
             case_properties.append(properties)
@@ -26,9 +26,9 @@ class nnUNetDataLoader3D(nnUNetDataLoaderBase):
             # self._data.load_case(i) (see nnUNetDataset.load_case)
             shape = data.shape[1:]
             dim = len(shape)
-            bbox_lbs, bbox_ubs = self.get_bbox(shape, force_fg, properties['class_locations'])
+            bbox_lbs, bbox_ubs = self.get_bbox(shape, force_fg, properties['class_locations'])          # ??
 
-            # whoever wrote this knew what he was doing (hint: it was me). We first crop the data to the region of the
+            # whoever wrote this knew what he was doing (hint: it was me). We first crop the data to the region of the   # ??
             # bbox that actually lies within the data. This will result in a smaller array which is then faster to pad.
             # valid_bbox is just the coord that lied within the data cube. It will be padded to match the patch size
             # later
